@@ -1,17 +1,68 @@
-import herin from './assets/herin.jpg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
-function App() {
+import Login from "./pages/Login";
+import StudentDashboard from "./pages/student/StudentDashboard";
+import WardenDashboard from "./pages/warden/WardenDashboard";
+import SecurityDashboard from "./pages/security/SecurityDashboard";
+
+/* 🔐 Protected Route */
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { role, loading } = useAuth();
+
+  // ⏳ wait until auth is restored from localStorage
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!role || !allowedRoles.includes(role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+function AppRoutes() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={herin} className="App-logo" alt="Herin" />
-        
-        <p>NAA THAN HERIN CATHARIN 😎</p>
+    <Routes>
+      <Route path="/" element={<Login />} />
 
-      </header>
-    </div>
+      <Route
+        path="/student"
+        element={
+          <ProtectedRoute allowedRoles={["student"]}>
+            <StudentDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/warden"
+        element={
+          <ProtectedRoute allowedRoles={["warden"]}>
+            <WardenDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/security"
+        element={
+          <ProtectedRoute allowedRoles={["security"]}>
+            <SecurityDashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
+  );
+}
