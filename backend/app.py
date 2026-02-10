@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+
+
+
 from config import JWT_SECRET_KEY, FRONTEND_URL
 from routes.auth_routes import auth_bp
 from routes.outpass_routes import outpass_bp
@@ -14,7 +17,7 @@ def create_app():
 
     # JWT config
     app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600-
 
     # Initialize JWT
     jwt = JWTManager(app)
