@@ -3,7 +3,6 @@ import Header from "../../components/Header";
 import Home from "../warden/Home";
 import Requests from "./Requests";
 import ActiveOutpasses from "./ActiveOutpasses";
-import Alerts from "./Alerts";
 import Analytics from "./Analytics";
 
 const WardenDashboard = () => {
@@ -13,18 +12,21 @@ const WardenDashboard = () => {
     { id: "home", label: "Overview" },
     { id: "requests", label: "Pending Requests" },
     { id: "active", label: "Active Tracking" },
-    { id: "alerts", label: "Late Alerts" },
     { id: "analytics", label: "Analytics" },
   ];
 
   const renderContent = () => {
     switch (activeTab) {
-      case "home": return <Home />;
-      case "requests": return <Requests />;
-      case "active": return <ActiveOutpasses />;
-      case "alerts": return <Alerts />;
-      case "analytics": return <Analytics />;
-      default: return <Home />;
+      case "home":
+        return <Home setActiveTab={setActiveTab} />; 
+      case "requests":
+        return <Requests />;
+      case "active":
+        return <ActiveOutpasses />;
+      case "analytics":
+        return <Analytics />;
+      default:
+        return <Home setActiveTab={setActiveTab} />;
     }
   };
 
@@ -32,7 +34,6 @@ const WardenDashboard = () => {
     <div style={styles.dashboardWrapper}>
       <Header title="Warden Portal" />
 
-      {/* Modern Tab Navigation */}
       <div style={styles.navContainer}>
         <div style={styles.navBar}>
           {tabs.map((tab) => (
@@ -42,8 +43,12 @@ const WardenDashboard = () => {
               style={{
                 ...styles.navButton,
                 color: activeTab === tab.id ? "#4CAF50" : "#95a5a6",
-                borderBottom: activeTab === tab.id ? "3px solid #4CAF50" : "3px solid transparent",
-                backgroundColor: activeTab === tab.id ? "#f1f8f1" : "transparent",
+                borderBottom:
+                  activeTab === tab.id
+                    ? "3px solid #4CAF50"
+                    : "3px solid transparent",
+                backgroundColor:
+                  activeTab === tab.id ? "#f1f8f1" : "transparent",
               }}
             >
               {tab.label}
@@ -52,11 +57,8 @@ const WardenDashboard = () => {
         </div>
       </div>
 
-      {/* Dynamic Content Area */}
       <div style={styles.contentArea}>
-        <div style={styles.contentCard}>
-          {renderContent()}
-        </div>
+        <div style={styles.contentCard}>{renderContent()}</div>
       </div>
     </div>
   );
@@ -65,7 +67,7 @@ const WardenDashboard = () => {
 const styles = {
   dashboardWrapper: {
     minHeight: "100vh",
-    backgroundColor: "#f8f9fa", // Light background matching Login/Student/Security
+    backgroundColor: "#f8f9fa",
     fontFamily: "'Segoe UI', Roboto, sans-serif",
   },
   navContainer: {
@@ -82,8 +84,6 @@ const styles = {
     display: "flex",
     width: "100%",
     maxWidth: "900px",
-    overflowX: "auto",
-    scrollbarWidth: "none",
   },
   navButton: {
     flex: 1,
@@ -98,14 +98,13 @@ const styles = {
     textAlign: "center",
   },
   contentArea: {
-    maxWidth: "1100px", // Wider area for analytics and tables
+    maxWidth: "1100px",
     margin: "0 auto",
     padding: "30px 20px",
   },
   contentCard: {
-    backgroundColor: "transparent", // Let individual components provide cards if needed
-    animation: "fadeIn 0.3s ease-in-out",
-  }
+    backgroundColor: "transparent",
+  },
 };
 
 export default WardenDashboard;

@@ -165,9 +165,32 @@ def update_request_status(request_id):
 def get_all_requests():
     try:
         requests = list(requests_collection.find().sort("createdAt", -1))
-        return jsonify({"requests": [format_outpass(r) for r in requests]}), 200
+        formatted_requests = []
+
+        for r in requests:
+            student_name = "Unknown"
+
+            if r.get("studentId"):
+                user = users_collection.find_one(
+                    {"_id": ObjectId(r["studentId"])},
+                    {"username": 1}
+                )
+                if user:
+                    student_name = user.get("username", "Unknown")
+
+            outpass = format_outpass(r)
+            outpass["studentName"] = student_name
+
+            formatted_requests.append(outpass)
+
+        return jsonify({"requests": formatted_requests}), 200
+
     except Exception as e:
-        return jsonify({"msg": "Error fetching all requests", "error": str(e)}), 500
+        return jsonify({
+            "msg": "Error fetching all requests",
+            "error": str(e)
+        }), 500
+
 
 # ----------------------------
 # Security: Verify QR (Exit/Entry)

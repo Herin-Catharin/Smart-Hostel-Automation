@@ -46,7 +46,7 @@ const Requests = () => {
       <table border="1" cellPadding="10" style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ backgroundColor: "#f0f0f0" }}>
-            <th>Student ID</th>
+            <th>Student Name</th>
             <th>Reason</th>
             <th>From</th>
             <th>To</th>
@@ -58,7 +58,7 @@ const Requests = () => {
         <tbody>
           {requests.map((r) => (
             <tr key={r._id}>
-              <td>{r.studentId}</td>
+              <td>{r.studentName}</td>
               <td>{r.reason}</td>
               <td>{new Date(r.fromTime).toLocaleString()}</td>
               <td>{new Date(r.toTime).toLocaleString()}</td>
